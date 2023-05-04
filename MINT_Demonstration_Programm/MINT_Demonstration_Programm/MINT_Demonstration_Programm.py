@@ -20,7 +20,6 @@ class App:
         self.window.configure(bg="#98FB98") 
         self.window.rowconfigure(0, weight=1)
         self.window.columnconfigure(0, weight=1)
-        self.window.columnconfigure(0, weight=1)
 
         # initialize some flags and attributes
         self.flag_intro = True
@@ -45,11 +44,12 @@ class App:
 
         # Create Buttons
         self.create_start_button()
+
                  
         # Create a frame to hold the MINT video stream canvas, but it is invisible at the beginning
         self.demo_frame = tk.Frame(self.window, height=self.height//2, width=self.width//2)
         self.MINT_canvas = tk.Canvas(self.demo_frame, width=self.introvideo.get(cv2.CAP_PROP_FRAME_WIDTH), height=self.introvideo.get(cv2.CAP_PROP_FRAME_HEIGHT),bg="#ffffff")
-
+        self.button_frame = tk.Frame(self.window, height=self.height//12, width=self.width)
 
     def update(self):
         if self.flag_start_demo:
@@ -66,10 +66,11 @@ class App:
         self.demo_frame.grid(column=0, row=0, rowspan=2, columnspan=2)
         self.MINT_canvas.pack(padx=75, pady=75)
         self.create_gender_button()
+        self.button_frame.grid(row=1, column=0, columnspan=2)
 
     def start_evaluation(self, choice):
-        self.male_button.grid_forget()
-        self.female_button.grid_forget()
+        self.male_button.pack_forget()
+        self.female_button.pack_forget()
         self.create_cancel_button()
         if choice == "male":
             self.evaluation_video = cv2.VideoCapture("./Male.mp4")
@@ -105,11 +106,12 @@ class App:
         self.cancel_button.grid(column=0, row=1)
 
     def create_gender_button(self):
-        self.male_button = tk.Button(self.window, command=lambda:self.start_evaluation("male"), bg="black", fg="white", text="Male AI", highlightcolor="darkgrey", padx=20, pady=20)
-        self.male_button.grid(column=0, row=1, padx=50)
         
-        self.female_button = tk.Button(self.window, command=lambda:self.start_evaluation("female"), bg="black", fg="white", text="Female AI", highlightcolor="darkgrey", padx=20, pady=20)
-        self.female_button.grid(column=1, row=1, sticky="w", padx=50)
+        self.male_button = tk.Button(self.button_frame, command=lambda:self.start_evaluation("male"), bg="black", fg="white", text="Male AI", highlightcolor="darkgrey", padx=20, pady=20)
+        self.male_button.pack(side="left")
+        
+        self.female_button = tk.Button(self.button_frame, command=lambda:self.start_evaluation("female"), bg="black", fg="white", text="Female AI", highlightcolor="darkgrey", padx=20, pady=20)
+        self.female_button.pack(side="left")
 
     def create_gradient_background(self, width, height):
         gradient = tk.Canvas(self.window, width=width, height=height)
