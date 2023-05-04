@@ -23,7 +23,8 @@ class App:
         self.window.columnconfigure(0, weight=1)
 
         # initialize some flags and attributes
-        self.intro = True
+        self.flag_intro = True
+        self.flag_start_demo = False
 
         self.load_content()
 
@@ -51,8 +52,8 @@ class App:
 
 
     def update(self):
-        if self.start_demo:
-            if self.intro:
+        if self.flag_start_demo:
+            if self.flag_intro:
                 self.videostream_to_tk_display(self.introvideo, self.MINT_canvas)
             else:
                 self.videostream_to_tk_display(self.evaluation_video, self.MINT_canvas)
@@ -60,6 +61,7 @@ class App:
 
     def start_demo(self):
         self.start_button.grid_forget()
+        self.flag_start_demo = True
 
         self.demo_frame.grid(column=0, row=0, rowspan=2, columnspan=2)
         self.MINT_canvas.pack(padx=75, pady=75)
@@ -73,11 +75,11 @@ class App:
             self.evaluation_video = cv2.VideoCapture("./Male.mp4")
         else:
             self.evaluation_video = cv2.VideoCapture("./Female.mp4")
-        self.intro= False
+        self.flag_intro= False
 
     def start_mainpage(self):
-        self.start_demo=False
-        self.intro=False
+        self.flag_start_demo = False
+        self.flag_intro = True
         self.cancel_button.grid_remove()
         self.demo_frame.grid_forget()
         self.load_content()
